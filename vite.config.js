@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: 'https://github.com/lxry-comet/jumpandjump/', // Базовый путь, соответствующий имени вашего репозитория
+  base: '/jumpandjump/', // Базовый путь, соответствующий имени вашего репозитория
   plugins: [
     react(),
     VitePWA({
@@ -30,7 +30,6 @@ export default defineConfig({
           { src: 'image_512px_maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-
       // Офлайн-режим: кэшируем и спрайты (png)
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,ico,webp,woff2}'],
