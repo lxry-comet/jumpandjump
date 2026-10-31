@@ -1,0 +1,73 @@
+.banner {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 200;
+  width: calc(100% - 32px);
+  max-width: 398px;
+  box-sizing: border-box;
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: #2a2a3a;
+  color: #fff;
+  border: 4px solid #000;
+  box-shadow: 5px 5px 0 #000;
+  font-family: 'Courier New', ui-monospace, monospace;
+  animation: slideUp 0.35s ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translate(-50%, 140%); }
+  to { transform: translate(-50%, 0); }
+}
+
+.icon {
+  font-size: 34px;
+  line-height: 1;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.body b {
+  color: #ffd23f;
+  font-size: 15px;
+}
+
+.body span {
+  color: #ccc;
+  line-height: 1.35;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.btnMain,
+.btnGhost {
+  font: inherit;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 14px;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  cursor: pointer;
+}
+
+.btnMain {
+  background: #5ad66f;
+  color: #0b2a10;
+}
+
+.btnGhost {
+  background: #ffd23f;
+  color: #000;
+}

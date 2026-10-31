@@ -1,0 +1,348 @@
+body {
+  background-color: #161616;
+  margin: 0;
+  font-family: 'Courier New', ui-monospace, monospace;
+}
+
+.app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  background: #1a1a1a;
+  color: #fff;
+  font-family: 'Courier New', ui-monospace, monospace;
+  user-select: none;
+}
+
+.screen {
+  width: 100%;
+  max-width: 430px;
+  height: 100dvh;
+  box-sizing: border-box;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  background: linear-gradient(#2b2140, #161616);
+}
+
+.pix {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip {
+  background: #2a2a3a;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  padding: 6px 12px;
+  font-weight: bold;
+}
+
+.hero {
+  flex: 1;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.title {
+  margin: 0 0 20px;
+  font-size: 40px;
+  letter-spacing: 2px;
+  color: #ffd23f;
+  text-shadow: 4px 4px 0 #000;
+}
+
+.title span {
+  color: #5ad66f;
+}
+
+.heroSkin {
+  width: 96px;
+  height: 96px;
+  animation: hop 0.9s ease-in-out infinite;
+}
+
+.heroSkin img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.heroPlat {
+  width: 140px;
+  height: 28px;
+  object-fit: fill;
+}
+
+@keyframes hop {
+  0%, 100% { transform: translateY(0) scale(1.1, 0.9); }
+  50% { transform: translateY(-50px) scale(0.9, 1.1); }
+}
+
+.btnPlay {
+  font: inherit;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 16px;
+  background: #5ad66f;
+  color: #0b2a10;
+  border: 4px solid #000;
+  box-shadow: 5px 5px 0 #000;
+  cursor: pointer;
+}
+
+.btnPlay:active,
+.btn:active,
+.btnSmall:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 #000;
+}
+
+.navRow {
+  display: flex;
+  gap: 12px;
+  padding-bottom: 8px;
+}
+
+.btn {
+  flex: 1;
+  font: inherit;
+  font-weight: bold;
+  padding: 12px;
+  background: #ffd23f;
+  color: #000;
+  border: 4px solid #000;
+  box-shadow: 4px 4px 0 #000;
+  cursor: pointer;
+}
+
+.btnSmall {
+  font: inherit;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 8px 10px;
+  background: #ffd23f;
+  color: #000;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btnSmall:disabled {
+  background: #555;
+  color: #999;
+  cursor: default;
+}
+
+.h2 {
+  margin: 8px 0 0;
+  font-size: 20px;
+  color: #ffd23f;
+  text-shadow: 2px 2px 0 #000;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab {
+  flex: 1;
+  font: inherit;
+  font-weight: bold;
+  padding: 10px;
+  background: #2a2a3a;
+  color: #aaa;
+  border: 3px solid #000;
+  cursor: pointer;
+}
+
+.tabActive {
+  background: #ffd23f;
+  color: #000;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-bottom: 20px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: #2a2a3a;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.cardSel {
+  border-color: #5ad66f;
+}
+
+.cardDone {
+  background: #20382a;
+}
+
+.cardLocked {
+  opacity: 0.75;
+}
+
+.skinBox {
+  flex: none;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #161616;
+  border: 3px solid #000;
+}
+
+.skinBox img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.bigEmoji {
+  font-size: 30px;
+}
+
+.cardInfo {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.cardInfo span {
+  color: #bbb;
+  font-size: 12px;
+}
+
+.pips {
+  display: flex;
+  gap: 4px;
+}
+
+.pip {
+  width: 14px;
+  height: 8px;
+  background: #161616;
+  border: 2px solid #000;
+}
+
+.pipOn {
+  background: #5ad66f;
+}
+
+.bar {
+  height: 10px;
+  background: #161616;
+  border: 2px solid #000;
+}
+
+.barFill {
+  height: 100%;
+  background: #ffd23f;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  background: #2a2a3a;
+  border: 3px solid #000;
+  font-size: 13px;
+}
+
+.legendRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.legendPlat {
+  position: relative;
+  flex: none;
+  width: 64px;
+  height: 28px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.legendPlat img {
+  width: 64px;
+  height: 16px;
+  object-fit: fill;
+}
+
+.legendEmoji {
+  position: absolute;
+  bottom: 12px;
+  font-size: 18px;
+}
+
+.legendItem {
+  font-size: 22px;
+  align-self: center;
+}
+
+.toast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 10px 16px;
+  background: #ffd23f;
+  color: #000;
+  font-weight: bold;
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0 #000;
+}
+
+.langRow {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.langBtn {
+  font: inherit;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 6px 12px;
+  background: #2a2a3a;
+  color: #aaa;
+  border: 3px solid #000;
+  cursor: pointer;
+}
+
+.langActive {
+  background: #ffd23f;
+  color: #000;
+}
