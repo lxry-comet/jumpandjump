@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
@@ -37,8 +37,7 @@ export default defineConfig({
         navigateFallback: '/jumpandjump/index.html', // Обновлено для GitHub Pages
       },
 
-      // Позволяет проверить установку и в npm run dev
-      devOptions: { enabled: true },
+      devOptions: { enabled: false },
     }),
   ],
 })
