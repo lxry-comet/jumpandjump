@@ -13,22 +13,11 @@ const JUMP = 15
 const GRAVITY = 0.6
 const MAX_FALL = 22
 
-// Иконки предметов — обычные эмодзи. Заменишь на спрайты — правь только здесь.
 const ICONS = { coin: '🪙', gem: '💎', rocket: '🚀', magnet: '🧲', star: '⭐', shield: '🛡️' }
-
 const SOLID = ['normal', 'moving', 'spring']
 
-/*
-  Типы платформ:
-  normal  — обычная (grass.png)
-  crumble — рассыпается после приземления (ground_rest.png)
-  moving  — ездит влево-вправо (синяя + стрелка ↔)
-  spring  — пружина 🍄, прыжок в 1.75 раза выше
-  cloud   — серое облако ☁️, исчезает после первого прыжка
-*/
-
 export default class GameArea extends Component {
-  state = { phase: 'play', summary: null, result: null } // play | paused | over
+  state = { phase: 'play', summary: null, result: null }
 
   boxRef = createRef()
   g = null
@@ -118,7 +107,6 @@ export default class GameArea extends Component {
   }
 
   exitRun = () => {
-    // выход из паузы: монеты и статистика забега всё равно сохраняются
     this.running = false
     cancelAnimationFrame(this.raf)
     if (this.g && !this.g.dead) this.props.onGameOver(this.buildResult())
@@ -170,8 +158,8 @@ export default class GameArea extends Component {
   /* ============================ ГЕНЕРАЦИЯ УРОВНЯ ============================ */
 
   spawnRow(g) {
-    const diff = Math.min(1, g.score / 2500) // сложность растёт до 2500 м
-    const gap = 70 + Math.random() * (35 + diff * 45) // максимум ~150 (прыжок достаёт ~187)
+    const diff = Math.min(1, g.score / 2500)
+    const gap = 70 + Math.random() * (35 + diff * 45)
     const y = g.topY - gap
     const w = Math.round(80 - diff * 16)
     const x = Math.random() * (g.W - w)
@@ -179,7 +167,6 @@ export default class GameArea extends Component {
     const prevSolid = SOLID.includes(g.lastType)
     const r = Math.random()
 
-    // после хрупкой/облачной платформы всегда идёт надёжная — уровень проходим
     let type = 'normal'
     if (!prevSolid) {
       type = r < 0.7 ? 'normal' : r < 0.88 ? 'moving' : 'spring'
@@ -196,7 +183,6 @@ export default class GameArea extends Component {
     if (type === 'crumble') Object.assign(plat, { breaking: false, timer: 0, falling: false, fvy: 0 })
     g.plats.push(plat)
 
-    // предметы
     const addItem = (kind, ix, iy) => g.items.push({ id: g.nextId++, kind, x: ix, y: iy })
     if (type !== 'moving') {
       const roll = Math.random()
@@ -208,7 +194,6 @@ export default class GameArea extends Component {
       else if (roll < 0.1) addItem('gem', cx - 14, iy)
       else if (roll < 0.38) addItem('coin', cx - 14, iy)
     }
-    // дорожка монет между платформами
     if (Math.random() < 0.2) {
       for (let i = 1; i <= 3; i++) {
         const t = i / 4
@@ -216,7 +201,6 @@ export default class GameArea extends Component {
       }
     }
 
-    // монстры (после 300 м)
     if (g.score > 300 && prevSolid && Math.random() < 0.07 + diff * 0.12) {
       const ex = 10 + Math.random() * (g.W - 60)
       g.enemies.push({
@@ -238,7 +222,7 @@ export default class GameArea extends Component {
 
   loop = (t) => {
     if (!this.running) return
-    const dt = Math.min((t - this.last) / 16.667, 2.5) // нормируем под 60 FPS
+    const dt = Math.min((t - this.last) / 16.667, 2.5)
     this.last = t
     if (!this.paused) {
       this.step(dt)
@@ -266,7 +250,7 @@ export default class GameArea extends Component {
     }
     if (pl.type === 'crumble') {
       pl.breaking = true
-      pl.timer = 12 // ~0.2 c до обрушения
+      pl.timer = 12
       g.run.crumbles++
     }
     if (pl.type === 'cloud') pl.gone = true
@@ -305,19 +289,16 @@ export default class GameArea extends Component {
     g.time += dt
     g.frame++
 
-    // --- горизонтальное управление ---
     const dir = this.pointerDown ? this.pointerDir : (this.keys.right ? 1 : 0) - (this.keys.left ? 1 : 0)
-    p.vx += (dir * 5.5 - p.vx) * Math.min(1, 0.4 * dt)
+    p.vx += (dir * 4.8 - p.vx) * Math.min(1, 0.18 * dt)
     if (Math.abs(p.vx) > 0.5) g.face = p.vx < 0 ? -1 : 1
 
-    // --- таймеры бонусов ---
     if (g.rocket > 0) {
       g.rocket -= dt
       if (g.rocket <= 0) { g.rocket = 0; p.vy = -6 }
     }
     if (g.magnet > 0) g.magnet = Math.max(0, g.magnet - dt)
 
-    // --- физика ---
     const prevBottom = p.y + PH
     if (g.rocket > 0) p.vy = -18
     else p.vy = Math.min(MAX_FALL, p.vy + GRAVITY * dt)
@@ -326,7 +307,6 @@ export default class GameArea extends Component {
     if (p.x < -PW / 2) p.x = g.W - PW / 2
     if (p.x > g.W - PW / 2) p.x = -PW / 2
 
-    // --- платформы ---
     for (const pl of g.plats) {
       if (pl.type === 'moving') {
         pl.x += pl.vx * dt
@@ -343,7 +323,6 @@ export default class GameArea extends Component {
       }
     }
 
-    // --- приземление ---
     if (p.vy > 0 && g.rocket <= 0) {
       const bottom = p.y + PH
       for (const pl of g.plats) {
@@ -355,7 +334,6 @@ export default class GameArea extends Component {
       }
     }
 
-    // --- предметы и магнит ---
     const pcx = p.x + PW / 2
     const pcy = p.y + PH / 2
     for (const it of g.items) {
@@ -378,7 +356,6 @@ export default class GameArea extends Component {
     }
     g.items = g.items.filter((i) => !i.taken)
 
-    // --- монстры ---
     for (const e of g.enemies) {
       e.x = Math.max(0, Math.min(g.W - 36, e.baseX + Math.sin(g.time * e.speed + e.phase) * e.range))
       if (e.dead) continue
@@ -399,7 +376,6 @@ export default class GameArea extends Component {
       }
     }
 
-    // --- скролл камеры ---
     const line = g.H * 0.4
     if (p.y < line) {
       const off = line - p.y
@@ -410,18 +386,15 @@ export default class GameArea extends Component {
       g.topY += off
     }
 
-    // --- эффекты ракеты и частицы ---
     if (g.rocket > 0 && g.frame % 2 === 0) this.fx(g, p.x + PW / 2 - 8 + (Math.random() * 10 - 5), p.y + PH + 14, '🔥', 14, 2.5)
     for (const o of g.parts) { o.y += o.vy * dt; o.life -= dt }
     g.parts = g.parts.filter((o) => o.life > 0)
 
-    // --- очистка и новые платформы ---
     g.plats = g.plats.filter((pl) => !pl.gone && pl.y < g.H + 300)
     g.items = g.items.filter((i) => i.y < g.H + 60)
     g.enemies = g.enemies.filter((e) => !e.dead && e.y < g.H + 60)
     while (g.topY > -250) this.spawnRow(g)
 
-    // --- падение: щит спасает один раз ---
     if (p.y > g.H) {
       if (g.shield) {
         g.shield = false
@@ -466,7 +439,9 @@ export default class GameArea extends Component {
 
     const p = g.player
     const h = Math.min(1, g.score / 3000)
-    const bg = `hsl(${205 + h * 55}, ${60 - h * 10}%, ${58 - h * 50}%)`
+
+    const timePulse = Math.sin(g.frame * 0.015) * 15
+    const bg = `hsl(${205 + h * 55 + timePulse}, ${60 - h * 10}%, ${58 - h * 50}%)`
 
     const speed = Math.abs(p.vy)
     const scaleY = 1 + speed * 0.02
@@ -481,7 +456,16 @@ export default class GameArea extends Component {
     return (
       <div className={css.gameArea}>
         <div className={css.gameContainer} ref={this.boxRef} style={{ background: bg }}>
+          
+          {/* СЛОИ ФОНА */}
           <div className={css.stars} style={{ opacity: Math.max(0, (h - 0.2) * 1.4), backgroundPositionY: `${g.dist * 0.15}px` }} />
+          <div className={css.nebula} style={{ opacity: 0.4 + h * 0.6 }} />
+          <div className={css.planets} style={{ backgroundPositionY: `${g.dist * 0.05}px` }} />
+          <div className={css.comets}>
+            <i className={css.comet} style={{ left: '60%', animationDelay: '0s' }} />
+            <i className={css.comet} style={{ left: '85%', top: '20%', animationDelay: '3.5s' }} />
+            <i className={css.comet} style={{ left: '30%', top: '10%', animationDelay: '6s' }} />
+          </div>
 
           {g.plats.map((pl) => this.renderPlatform(pl))}
 
@@ -523,7 +507,6 @@ export default class GameArea extends Component {
             </div>
           ))}
 
-          {/* Зона управления: левая/правая половина экрана */}
           <div
             className={css.touch}
             onPointerDown={this.onPointerDown}
